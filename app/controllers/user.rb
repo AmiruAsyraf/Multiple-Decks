@@ -1,4 +1,5 @@
 enable :sessions
+require 'byebug'
 
 get '/' do
    session.clear
@@ -15,27 +16,19 @@ end
 post '/login' do
   @check = params[:post]
   @account = User.find_by_password(@check["password"])
-
   if @account
     session[:id] = @account.id
-    redirect to("/#{@account.name}")
+    redirect to("/user/#{@account.id}")
   else
     redirect to ("/")
   end
 end
 
-get '/deck/:deck' do
-    @deck = Deck.find_by_name(params[:deck])
-    @question = Card.find(:all, :conditions =>  ["deck_id = ?", @deck.id])
+get '/deck/:id' do
+    @deck = Deck.find_by_id( params[:id])
+    @question =  Card.where(deck_id: params[:id])
     @number =  session[:number]
-    session[:id] = @deck.id
-    erb :question
-end
-
-get '/next/new' do
-    @deck = Deck.find_by_id(session[:id])
-    @question = Card.find(:all, :conditions =>  ["deck_id = ?", session[:id]])
-    @number =  session[:number]
+    session[:id] = params[:id]
     if @question[@number] == nil
       erb :finish
     else
@@ -43,26 +36,18 @@ get '/next/new' do
     end
 end
 
-get '/:name' do
-    @details = User.find_by_name(params[:name])
+get '/user/:id' do
+    @details = User.find_by_id(params[:id])
     @decks = Deck.all
-
     erb :login
 end
 
-post '/answer' do
-  p session[:number]
-
-  @question = Card.find(:all, :conditions =>  ["deck_id = ?", session[:id]])
-
-  p @question
-  @question[session[:number]].answer
-
+post '/deck/:deck_id/card/:card_id' do
+  @question = Card.where(deck_id: session[:id])
   if params[:answer] == @question[session[:number]].answer
     session[:number] += 1
   end
-
-    redirect to ("/next/new")
+    redirect to ("/deck/#{params[:deck_id]}")
 end
 
 

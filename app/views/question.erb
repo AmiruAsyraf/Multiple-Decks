@@ -3,7 +3,7 @@
 
     <h1>Question <%= @deck.name %>!</h1>
       <p> <%=  @question[@number.to_i].question %></p>
-        <form action="/answer" method="post">
+        <form action="/deck/<%= @deck.id%>/card/<%= @question[@number.to_i].id%>" method="post">
         <input type="text" name="answer">
         <input type="submit" value="Answer!">
         </form> <br>
