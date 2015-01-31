@@ -1,0 +1,12 @@
+<div class="container">
+  <center>
+  <h1><%= @user.name %> Statistics</h1>
+
+  <% @statistic.each do |c| %>
+      <p> Correct : <%=  c.correct %> Wrong : <%=  c.wrong %></p>
+    <% end %>
+<br>
+  <a href= "/deck/<%= @deck.id %>" >Start Another Round</a>
+  <br>
+</center>
+</div>

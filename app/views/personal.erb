@@ -1,0 +1,13 @@
+<div class="container">
+  <center>
+  <h1>Welcome <%= @details.name %>!</h1>
+
+    <h1> List of Your Decks </h1>
+  <% @decks.each do |c| %>
+      <p> <a href= "/statistic/deck/<%=  c.id %>" ><%=  c.name %></a></p>
+    <% end %>
+<br>
+  <a href= "/sign_out" >Sign out</a>
+  <br>
+</center>
+</div>
